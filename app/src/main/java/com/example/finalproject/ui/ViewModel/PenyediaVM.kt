@@ -5,6 +5,8 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.finalproject.MahasiswaApplications
+import com.example.finalproject.ui.ViewModel.MhsVM.HomeMhsVM
+import com.example.finalproject.ui.ViewModel.MhsVM.InsertMhsVM
 
 object PenyediaViewModel{
     val Factory = viewModelFactory {
