@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.finalproject.Model.Mahasiswa
 import com.example.finalproject.Repository.MahasiswaRepository
+import com.example.finalproject.ui.View.MhsView.DestinasiUpdateMhs
 import kotlinx.coroutines.launch
 
 class UpdateMhsVM(
@@ -13,7 +14,7 @@ class UpdateMhsVM(
     private val mhs: MahasiswaRepository
 ) : ViewModel() {
 
-    val idMahasiswa: String = checkNotNull(savedStateHandle[DestinasiUpdateMhs.NIM])
+    val idMahasiswa: String = checkNotNull(savedStateHandle[DestinasiUpdateMhs.IDMhs])
     var uiState = mutableStateOf(MahasiswaUiState())
         private set
     init {
