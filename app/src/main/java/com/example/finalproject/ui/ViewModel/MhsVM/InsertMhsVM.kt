@@ -1,4 +1,4 @@
-package com.example.finalproject.ui.ViewModel
+package com.example.finalproject.ui.ViewModel.MhsVM
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,19 +11,19 @@ import kotlinx.coroutines.launch
 
 class InsertMhsVM(private val mhs: MahasiswaRepository) : ViewModel(){
 
-    var uiState by mutableStateOf(InsertUiState())
+    var uiState by mutableStateOf(MahasiswaUiState())
         private set
 
 
-    fun updateInsertMhsState(insertUiEvent: InsertUiEvent) {
-        uiState = InsertUiState(insertUiEvent = insertUiEvent)
+    fun updateInsertMhsState(mahasiswaUiEvent: MahasiswaUiEvent) {
+        uiState = MahasiswaUiState(mahasiswaUiEvent = mahasiswaUiEvent)
     }
 
 
     suspend fun insertMhs() {
         viewModelScope.launch {
             try {
-                mhs.insertMahasiswa(uiState.insertUiEvent.toMhs())
+                mhs.insertMahasiswa(uiState.mahasiswaUiEvent.toMhs())
             }catch (e:Exception){
                 e.printStackTrace()
             }
@@ -31,11 +31,11 @@ class InsertMhsVM(private val mhs: MahasiswaRepository) : ViewModel(){
     }
 }
 
-data class InsertUiState(
-    val insertUiEvent:InsertUiEvent = InsertUiEvent()
+data class MahasiswaUiState(
+    val mahasiswaUiEvent:MahasiswaUiEvent = MahasiswaUiEvent()
 )
 
-data class InsertUiEvent(
+data class MahasiswaUiEvent(
     val nim:String = "",
     val nama:String = "",
     val idMahasiswa:String = "",
@@ -44,7 +44,7 @@ data class InsertUiEvent(
     val idKamar:String = "",
 )
 
-fun InsertUiEvent.toMhs():Mahasiswa = Mahasiswa(
+fun MahasiswaUiEvent.toMhs():Mahasiswa = Mahasiswa(
     idMahasiswa = idMahasiswa,
     nama = nama,
     nim = nim,
@@ -53,11 +53,11 @@ fun InsertUiEvent.toMhs():Mahasiswa = Mahasiswa(
     idKamar = idKamar
 )
 
-fun  Mahasiswa.toUiStateMhs():InsertUiState = InsertUiState(
-    insertUiEvent = toInsertUiEvent()
+fun  Mahasiswa.toUiStateMhs():MahasiswaUiState = MahasiswaUiState(
+    mahasiswaUiEvent = toMahasiswaUiEvent()
 )
 
-fun Mahasiswa.toInsertUiEvent():InsertUiEvent = InsertUiEvent(
+fun Mahasiswa.toMahasiswaUiEvent():MahasiswaUiEvent = MahasiswaUiEvent(
     idMahasiswa = idMahasiswa,
     nama = nama,
     nim = nim,

@@ -1,4 +1,4 @@
-package com.example.finalproject.ui.ViewModel
+package com.example.finalproject.ui.ViewModel.MhsVM
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

@@ -1,4 +1,4 @@
-package com.example.finalproject.ui.ViewModel
+package com.example.finalproject.ui.ViewModel.MhsVM
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,14 +11,14 @@ import com.example.finalproject.Repository.MahasiswaRepository
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-sealed class HomeUiState {
-    data class Success(val mahasiswa: List<Mahasiswa>) : HomeUiState()
-    object  Error : HomeUiState()
-    object Loading : HomeUiState()
+sealed class HomeMhsUiState {
+    data class Success(val mahasiswa: List<Mahasiswa>) : HomeMhsUiState()
+    object  Error : HomeMhsUiState()
+    object Loading : HomeMhsUiState()
 }
 
 class HomeMhsVM (private val mhs: MahasiswaRepository): ViewModel(){
-    var mhsUIState: HomeUiState by mutableStateOf(HomeUiState.Loading)
+    var mhsUIState: HomeMhsUiState by mutableStateOf(HomeMhsUiState.Loading)
         private set
 
     init {
@@ -26,13 +26,13 @@ class HomeMhsVM (private val mhs: MahasiswaRepository): ViewModel(){
     }
     fun getMhs(){
         viewModelScope.launch {
-            mhsUIState = HomeUiState.Loading
+            mhsUIState = HomeMhsUiState.Loading
             mhsUIState = try {
-                HomeUiState.Success(mhs.getMahasiswa().data)
+                HomeMhsUiState.Success(mhs.getMahasiswa().data)
             }catch (e:IOException){
-                HomeUiState.Error
+                HomeMhsUiState.Error
             }catch (e: HttpException){
-                HomeUiState.Error
+                HomeMhsUiState.Error
             }
         }
     }
@@ -41,9 +41,9 @@ class HomeMhsVM (private val mhs: MahasiswaRepository): ViewModel(){
             try {
                 mhs.deleteMahasiswa(idMahasiswa)
             }catch (e: IOException){
-                HomeUiState.Error
+                HomeMhsUiState.Error
             }catch (e:HttpException){
-                HomeUiState.Error
+                HomeMhsUiState.Error
             }
         }
     }
