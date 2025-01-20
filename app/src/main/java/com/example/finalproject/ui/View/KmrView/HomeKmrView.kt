@@ -45,7 +45,7 @@ import com.example.finalproject.ui.ViewModel.KamarVM.HomeKmrUiState
 import com.example.finalproject.ui.ViewModel.PenyediaViewModel
 
 object DestinasiHomeKmr : DestinasiNavigasi {
-    override val route = "home"
+    override val route = "homekmr"
     override val titleRes = "Home Kamar"
 }
 

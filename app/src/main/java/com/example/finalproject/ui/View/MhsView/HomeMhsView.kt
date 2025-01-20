@@ -46,7 +46,7 @@ import com.example.finalproject.R
 
 
 object DestinasiHomeMhs : DestinasiNavigasi {
-    override val route = "home"
+    override val route = "homemhs"
     override val titleRes = "Home Mahasiswa"
 }
 
