@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.finalproject.Model.Kamar
 import com.example.finalproject.Model.Mahasiswa
 import com.example.finalproject.Repository.MahasiswaRepository
 import kotlinx.coroutines.launch
@@ -32,7 +33,8 @@ class InsertMhsVM(private val mhs: MahasiswaRepository) : ViewModel(){
 }
 
 data class MahasiswaUiState(
-    val mahasiswaUiEvent:MahasiswaUiEvent = MahasiswaUiEvent()
+    val mahasiswaUiEvent:MahasiswaUiEvent = MahasiswaUiEvent(),
+    val kamarList:List<Kamar> = emptyList()
 )
 
 data class MahasiswaUiEvent(
