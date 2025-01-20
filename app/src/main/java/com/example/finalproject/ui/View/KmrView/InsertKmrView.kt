@@ -28,7 +28,7 @@ import com.example.finalproject.ui.ViewModel.KamarVM.KamarUiState
 import com.example.finalproject.ui.ViewModel.PenyediaViewModel
 import kotlinx.coroutines.launch
 
-object DestinasiEntry:DestinasiNavigasi{
+object DestinasiEntryKmr:DestinasiNavigasi{
     override val route = "item_entry"
     override val titleRes = "Entry Kmr"
 }
@@ -46,7 +46,7 @@ fun EntryKmrScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiEntry.titleRes,
+                title = DestinasiEntryKmr.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = navigateBack
