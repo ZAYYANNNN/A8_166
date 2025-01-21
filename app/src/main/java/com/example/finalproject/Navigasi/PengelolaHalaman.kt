@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.finalproject.ui.View.MhsView.DestinasiDetailMhs
 import com.example.finalproject.ui.View.MhsView.DestinasiEntry
 import com.example.finalproject.ui.View.MhsView.DestinasiHomeMhs
+import com.example.finalproject.ui.View.MhsView.EntryMhsScreen
 import com.example.finalproject.ui.View.MhsView.HomeScreen
 
 @Composable
@@ -34,6 +35,15 @@ fun PengelolaHalaman(
                     println("PengelolaHalaman: idMahasiswa = $idMahasiswa")
                 }
             )
+        }
+        composable(DestinasiEntry.route){
+            EntryMhsScreen(navigateBack = {
+                navController.navigate(DestinasiHomeMhs.route){
+                    popUpTo(DestinasiHomeMhs.route){
+                        inclusive = true
+                    }
+                }
+            })
         }
 
 
