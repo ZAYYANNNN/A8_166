@@ -3,9 +3,11 @@ package com.example.finalproject.Navigasi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.finalproject.ui.View.MhsView.DestinasiDetailMhs
 import com.example.finalproject.ui.View.MhsView.DestinasiEntry
 import com.example.finalproject.ui.View.MhsView.DestinasiHomeMhs
@@ -13,6 +15,7 @@ import com.example.finalproject.ui.View.MhsView.DestinasiUpdateMhs
 import com.example.finalproject.ui.View.MhsView.DetailMhsView
 import com.example.finalproject.ui.View.MhsView.EntryMhsScreen
 import com.example.finalproject.ui.View.MhsView.HomeScreen
+import com.example.finalproject.ui.View.MhsView.UpdateMhsView
 
 @Composable
 fun PengelolaHalaman(
@@ -70,8 +73,28 @@ fun PengelolaHalaman(
             }
         }
 
+        composable(
+            DestinasiUpdateMhs.routesWithArg, // Correct route with argument
+            arguments = listOf(
+                navArgument(DestinasiUpdateMhs.IDMhs) {
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
 
+            val idMahasiswa = backStackEntry.arguments?.getString(DestinasiUpdateMhs.IDMhs)
 
+            idMahasiswa?.let {
+                UpdateMhsView(
+                    navigateBack = {
+                        navController.popBackStack()
+                    },
+
+                    modifier = modifier
+
+                )
+            }
+        }
 
     }
 }
