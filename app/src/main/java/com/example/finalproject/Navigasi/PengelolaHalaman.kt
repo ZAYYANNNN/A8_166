@@ -9,6 +9,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.finalproject.ui.View.MhsView.DestinasiDetailMhs
 import com.example.finalproject.ui.View.MhsView.DestinasiEntry
 import com.example.finalproject.ui.View.MhsView.DestinasiHomeMhs
+import com.example.finalproject.ui.View.MhsView.DestinasiUpdateMhs
+import com.example.finalproject.ui.View.MhsView.DetailMhsView
 import com.example.finalproject.ui.View.MhsView.EntryMhsScreen
 import com.example.finalproject.ui.View.MhsView.HomeScreen
 
@@ -45,6 +47,30 @@ fun PengelolaHalaman(
                 }
             })
         }
+        composable(DestinasiDetailMhs.routesWithArg) { backStackEntry ->
+
+            val idMahasiswa = backStackEntry.arguments?.getString(DestinasiDetailMhs.IDMhs)
+
+            idMahasiswa?.let {
+                DetailMhsView(
+                    idMahasiswa = it,
+                    navigateBack = {
+                        // Aksi ketika tombol "Kembali" ditekan
+                        navController.navigate(DestinasiHomeMhs.route) {
+                            popUpTo(DestinasiHomeMhs.route) {
+                                inclusive = true // Pop sampai ke DestinasiHome
+                            }
+                        }
+                    },
+                    onEditClick = {
+                        // Navigasi ke halaman update dengan NIM sebagai argumen
+                        navController.navigate("${DestinasiUpdateMhs.route}/$it")
+                    }
+                )
+            }
+        }
+
+
 
 
     }
