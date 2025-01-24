@@ -23,8 +23,10 @@ class InsertBangunanVM(private val bgn: BangunanRepository) : ViewModel(){
     suspend fun insertBgn() {
         viewModelScope.launch {
             try {
-                bgn.insertBangunan(uiState.bangunanUiEvent.toBgn())
-            }catch (e:Exception){
+                val bangunan = uiState.bangunanUiEvent.toBgn()
+                println("Data yang dikirim: $bangunan") // Cetak data sebelum dikirim
+                bgn.insertBangunan(bangunan)
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
