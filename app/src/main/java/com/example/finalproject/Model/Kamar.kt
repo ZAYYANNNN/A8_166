@@ -5,10 +5,20 @@ import kotlinx.serialization.*
 @OptIn(InternalSerializationApi::class)
 @Serializable
 data class Kamar(
+
+    @SerialName("id_kamar")
     val idKamar : String,
+
+    @SerialName("no_kamar")
     val noKamar : String,
+
+    @SerialName("kapasitas")
     val kapasitas : String,
+
+    @SerialName("status_kamar")
     val statusKamar: String,
+
+    @SerialName("id_bangunan")
     val idBangunan : String
 
 )
