@@ -28,6 +28,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Model.Kamar
 import com.example.finalproject.Navigasi.DestinasiNavigasi
 import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.View.OnError
+import com.example.finalproject.ui.View.OnLoading
 import com.example.finalproject.ui.ViewModel.KamarVM.DetailKamarVM
 import com.example.finalproject.ui.ViewModel.KamarVM.DetailKmrUiState
 import com.example.finalproject.ui.ViewModel.PenyediaViewModel
