@@ -28,6 +28,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Model.Bangunan
 import com.example.finalproject.Navigasi.DestinasiNavigasi
 import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.View.OnError
+import com.example.finalproject.ui.View.OnLoading
 import com.example.finalproject.ui.ViewModel.BangunanVM.DetailBangunanVM
 import com.example.finalproject.ui.ViewModel.BangunanVM.DetailBgnUiState
 import com.example.finalproject.ui.ViewModel.PenyediaViewModel

@@ -7,30 +7,30 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface BangunanService {
-    @Headers(
-        "Accept: application/json",
-        "Content-Type: application/json",
-    )
 
-    @GET(".")
+    @GET("bangunan")
     suspend fun getAllBangunan(): AllBangunanResponse
 
-    @GET("{idBangunan}")
-    suspend fun getBangunanbyid(@Path("idBangunan") idBangunan:String): BangunanDetailResponse
+    @GET("bangunan/{id_bangunan}")
+    suspend fun getBangunanbyid(@Path("id_bangunan") idBangunan: String): BangunanDetailResponse
 
-    @POST("store")
+    // Menambahkan data bangunan
+    @POST("bangunan/store")  // Sesuaikan dengan route di backend
     suspend fun insertBangunan(@Body bangunan: Bangunan)
 
-    @PUT("{idBangunan}")
-    suspend fun updateBangunan(@Path("idBangunan")idBangunan: String, @Body bangunan: Bangunan)
+    // Mengupdate data bangunan
+    @PUT("bangunan/{id_bangunan}")  // Sesuaikan dengan route di backend
+    suspend fun updateBangunan(
+        @Path("id_bangunan") idBangunan: String,
+        @Body bangunan: Bangunan
+    )
 
-    @DELETE("{idBangunan}")
-    suspend fun deleteBangunan(@Path("idBangunan") idBangunan:String): Response<Void>
-
+    // Menghapus data bangunan
+    @DELETE("bangunan/{id_bangunan}")  // Sesuaikan dengan route di backend
+    suspend fun deleteBangunan(@Path("id_bangunan") idBangunan: String): Response<Void>
 }

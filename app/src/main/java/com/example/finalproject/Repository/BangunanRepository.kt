@@ -18,23 +18,25 @@ interface BangunanRepository{
 }
 
 class NetworkBangunanRepository(
-    private val BangunanApiService: BangunanService
+    private val bangunanApiService: BangunanService
 ) : BangunanRepository {
+
     override suspend fun getBangunan(): AllBangunanResponse =
-        BangunanApiService.getAllBangunan()
+        bangunanApiService.getAllBangunan()
+
 
 
     override suspend fun insertBangunan(bangunan: Bangunan) {
-        BangunanApiService.insertBangunan(bangunan)
+        bangunanApiService.insertBangunan(bangunan)
     }
 
     override suspend fun updateBangunan(idBangunan: String, bangunan: Bangunan) {
-        BangunanApiService.updateBangunan(idBangunan, bangunan)
+        bangunanApiService.updateBangunan(idBangunan, bangunan)
     }
 
     override suspend fun deleteBangunan(idBangunan: String) {
         try {
-            val response = BangunanApiService.deleteBangunan(idBangunan)
+            val response = bangunanApiService.deleteBangunan(idBangunan)
             if (!response.isSuccessful) { // Corrected spelling
                 throw IOException(
                     "Failed to delete Bangunan. HTTP Status Code: " + "${response.code()}"
@@ -50,7 +52,7 @@ class NetworkBangunanRepository(
 
 
     override suspend fun getBangunanbyid(idBangunan: String): Bangunan {
-        return BangunanApiService.getBangunanbyid(idBangunan).data
+        return bangunanApiService.getBangunanbyid(idBangunan).data
     }
 
 }

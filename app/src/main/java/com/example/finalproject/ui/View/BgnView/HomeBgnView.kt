@@ -1,6 +1,5 @@
 package com.example.finalproject.ui.View.BgnView
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,13 +10,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,14 +29,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Model.Bangunan
 import com.example.finalproject.Navigasi.DestinasiNavigasi
-import com.example.finalproject.R
 import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.View.OnError
+import com.example.finalproject.ui.View.OnLoading
 import com.example.finalproject.ui.ViewModel.BangunanVM.HomeBangunanVM
 import com.example.finalproject.ui.ViewModel.BangunanVM.HomeBgnUiState
 import com.example.finalproject.ui.ViewModel.PenyediaViewModel
@@ -55,6 +51,7 @@ fun HomeScreenBgn(
     navigateToItemEntry: () -> Unit,
     modifier: Modifier = Modifier,
     onDetailClick: (String) -> Unit = {},
+    navigateBack: () -> Unit = {},
     viewModel: HomeBangunanVM = viewModel(factory = PenyediaViewModel.Factory)
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -63,8 +60,9 @@ fun HomeScreenBgn(
         topBar = {
             CostumeTopAppBar(
                 title = DestinasiHomeBgn.titleRes,
-                canNavigateBack = false,
+                canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
+                navigateUp = navigateBack,
                 onRefresh = {
                     viewModel.getBgn()
                 }
@@ -82,14 +80,15 @@ fun HomeScreenBgn(
     ) { innerPadding ->
         HomeStatusBgn(
             homeBgnUiState = viewModel.bgnUIState,
-            retryAction = { viewModel.getBgn() }, modifier = Modifier.padding(innerPadding),
-            onDetailClick = onDetailClick, onDeleteClick = {
-                viewModel.deleteBgn(it.idBangunan)
+            retryAction = { viewModel.getBgn() },
+            modifier = Modifier.padding(innerPadding),
+            onDetailClick = onDetailClick,
+            onDeleteClick = { bangunan ->
+                viewModel.deleteBgn(bangunan.idBangunan)
                 viewModel.getBgn()
             }
         )
     }
-
 }
 
 @Composable
@@ -105,49 +104,19 @@ fun HomeStatusBgn(
 
         is HomeBgnUiState.Success ->
             if (homeBgnUiState.bangunan.isEmpty()) {
-                return Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Tidak ada data kontak")
+                Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = "Tidak ada data bangunan")
                 }
             } else {
                 BgnLayout(
-                    bangunan = homeBgnUiState.bangunan, modifier = modifier.fillMaxWidth(),
-                    onDetailClick = {
-                        onDetailClick(it.idBangunan)
-                    },
-                    onDeleteClick = {
-                        onDeleteClick(it)
-                    }
+                    bangunan = homeBgnUiState.bangunan,
+                    modifier = modifier.fillMaxWidth(),
+                    onDetailClick = { onDetailClick(it.idBangunan) },
+                    onDeleteClick = { onDeleteClick(it) }
                 )
             }
 
         is HomeBgnUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
-    }
-}
-
-@Composable
-fun OnLoading(modifier: Modifier = Modifier) {
-    Image(
-        modifier = modifier.size(200.dp),
-        painter = painterResource(R.drawable.loading),
-        contentDescription = stringResource(R.string.loading)
-    )
-}
-
-@Composable
-fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_connection_error), contentDescription = ""
-        )
-
-        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
-        Button(onClick = retryAction) {
-            Text(stringResource(R.string.retry))
-        }
     }
 }
 
@@ -163,15 +132,13 @@ fun BgnLayout(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(bangunan) { bangunan -> // Perbaikan di sini
+        items(bangunan) { bangunan ->
             BgnCard(
                 bangunan = bangunan,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onDetailClick(bangunan) },
-                onDeleteClick = {
-                    onDeleteClick(bangunan)
-                }
+                onDeleteClick = { onDeleteClick(bangunan) }
             )
         }
     }
@@ -207,20 +174,19 @@ fun BgnCard(
                         contentDescription = null,
                     )
                 }
-                Text(
-                    text = bangunan.namaBangunan,
-                    style = MaterialTheme.typography.titleMedium
-                )
             }
             Text(
-                text = bangunan.jumlahLantai,
+                text = "Nama Bangunan: ${bangunan.namaBangunan}",
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
-                text = bangunan.alamat,
+                text = "Jumlah Lantai: ${bangunan.jumlahLantai}",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = "Alamat: ${bangunan.alamat}",
                 style = MaterialTheme.typography.titleMedium
             )
         }
     }
 }
-

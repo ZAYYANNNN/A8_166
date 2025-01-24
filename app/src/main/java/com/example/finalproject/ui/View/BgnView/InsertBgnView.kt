@@ -29,7 +29,7 @@ import com.example.finalproject.ui.ViewModel.PenyediaViewModel
 import kotlinx.coroutines.launch
 
 object DestinasiEntryBgn:DestinasiNavigasi{
-    override val route = "item_entry"
+    override val route = "entryBgn"
     override val titleRes = "Entry Bangunan"
 }
 
@@ -138,7 +138,7 @@ fun FormInputBgn(
         OutlinedTextField(
             value = bangunanUiEvent.alamat,
             onValueChange = {onValueChange(bangunanUiEvent.copy(alamat = it))},
-            label = { Text("Jumlah Lantai") },
+            label = { Text("Alamat") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
