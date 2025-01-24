@@ -18,74 +18,53 @@ import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
 
-interface MhsContainer {
+interface AppContainer {
     val mahasiswaRepository: MahasiswaRepository
-}
-interface KmrContainer {
     val kamarRepository: KamarRepository
-}
-interface BgnContainer {
     val bangunanRepository: BangunanRepository
-}
-interface PayContainer {
     val sewaRepository: SewaRepository
 }
 
-class MahasiswaContainer:MhsContainer{
-    private val baseUrl = "http://10.0.2.2:3000/api/mahasiswa/"//ganti localhost
-    private val json = Json{ignoreUnknownKeys = true}
+class StayContainer : AppContainer {
+    private val baseUrl = "http://10.0.2.2:3000/api/" // Base URL untuk semua endpoint
+    private val json = Json { ignoreUnknownKeys = true }
+
     private val retrofit: Retrofit = Retrofit.Builder()
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-        .baseUrl(baseUrl).build()
+        .baseUrl(baseUrl)
+        .build()
+
+    // Mahasiswa
     private val mahasiswaService: MahasiswaService by lazy {
         retrofit.create(MahasiswaService::class.java)
     }
     override val mahasiswaRepository: MahasiswaRepository by lazy {
         NetworkMahasiswaRepository(mahasiswaService)
     }
-}
 
-class KamarContainer:KmrContainer{
-    private val baseUrl = "http://10.0.2.2:3000/api/kamar/"//ganti localhost
-    private val json = Json{ignoreUnknownKeys = true}
-    private val retrofit: Retrofit = Retrofit.Builder()
-        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-        .baseUrl(baseUrl).build()
+    // Kamar
     private val kamarService: KamarService by lazy {
         retrofit.create(KamarService::class.java)
     }
     override val kamarRepository: KamarRepository by lazy {
         NetworkKamarRepository(kamarService)
     }
-}
 
-class BangunanContainer:BgnContainer{
-    private val baseUrl = "http://10.0.2.2:3000/api/bangunan/"//ganti localhost
-    private val json = Json{ignoreUnknownKeys = true}
-    private val retrofit: Retrofit = Retrofit.Builder()
-        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-        .baseUrl(baseUrl).build()
+    // Bangunan
     private val bangunanService: BangunanService by lazy {
         retrofit.create(BangunanService::class.java)
     }
     override val bangunanRepository: BangunanRepository by lazy {
         NetworkBangunanRepository(bangunanService)
     }
-}
 
-class SewaContainer:PayContainer{
-    private val baseUrl = "http://10.0.2.2:3000/api/sewa/"//ganti localhost
-    private val json = Json{ignoreUnknownKeys = true}
-    private val retrofit: Retrofit = Retrofit.Builder()
-        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-        .baseUrl(baseUrl).build()
     private val sewaService: SewaService by lazy {
         retrofit.create(SewaService::class.java)
     }
     override val sewaRepository: SewaRepository by lazy {
         NetworkSewaRepository(sewaService)
     }
+
+    
+
 }
-
-
-
