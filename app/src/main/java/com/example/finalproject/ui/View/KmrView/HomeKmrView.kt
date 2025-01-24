@@ -32,14 +32,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Model.Kamar
 import com.example.finalproject.Navigasi.DestinasiNavigasi
-import com.example.finalproject.R
 import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.View.OnError
+import com.example.finalproject.ui.View.OnLoading
 import com.example.finalproject.ui.ViewModel.KamarVM.HomeKamarVM
 import com.example.finalproject.ui.ViewModel.KamarVM.HomeKmrUiState
 import com.example.finalproject.ui.ViewModel.PenyediaViewModel
@@ -53,6 +52,7 @@ object DestinasiHomeKmr : DestinasiNavigasi {
 @Composable
 fun HomeScreenKmr(
     navigateToItemEntry: () -> Unit,
+    navigateBack: () -> Unit,  // Parameter navigateBack
     modifier: Modifier = Modifier,
     onDetailClick: (String) -> Unit = {},
     viewModel: HomeKamarVM = viewModel(factory = PenyediaViewModel.Factory)
@@ -63,8 +63,9 @@ fun HomeScreenKmr(
         topBar = {
             CostumeTopAppBar(
                 title = DestinasiHomeKmr.titleRes,
-                canNavigateBack = false,
+                canNavigateBack = true,  // Izinkan navigasi kembali
                 scrollBehavior = scrollBehavior,
+                onNavigateBack = navigateBack,  // Gunakan navigateBack
                 onRefresh = {
                     viewModel.getKmr()
                 }
@@ -82,14 +83,15 @@ fun HomeScreenKmr(
     ) { innerPadding ->
         HomeStatusKmr(
             homeKmrUiState = viewModel.kmrUIState,
-            retryAction = { viewModel.getKmr() }, modifier = Modifier.padding(innerPadding),
-            onDetailClick = onDetailClick, onDeleteClick = {
-                viewModel.deleteKmr(it.idKamar)
+            retryAction = { viewModel.getKmr() },
+            modifier = Modifier.padding(innerPadding),
+            onDetailClick = onDetailClick,
+            onDeleteClick = { kamar ->
+                viewModel.deleteKmr(kamar.idKamar)
                 viewModel.getKmr()
             }
         )
     }
-
 }
 
 @Composable
@@ -105,49 +107,19 @@ fun HomeStatusKmr(
 
         is HomeKmrUiState.Success ->
             if (homeKmrUiState.kamar.isEmpty()) {
-                return Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Tidak ada data kontak")
+                Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = "Tidak ada data kamar")
                 }
             } else {
                 KmrLayout(
-                    kamar = homeKmrUiState.kamar, modifier = modifier.fillMaxWidth(),
-                    onDetailClick = {
-                        onDetailClick(it.idKamar)
-                    },
-                    onDeleteClick = {
-                        onDeleteClick(it)
-                    }
+                    kamar = homeKmrUiState.kamar,
+                    modifier = modifier.fillMaxWidth(),
+                    onDetailClick = { onDetailClick(it.idKamar) },
+                    onDeleteClick = { onDeleteClick(it) }
                 )
             }
 
         is HomeKmrUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
-    }
-}
-
-@Composable
-fun OnLoading(modifier: Modifier = Modifier) {
-    Image(
-        modifier = modifier.size(200.dp),
-        painter = painterResource(R.drawable.loading),
-        contentDescription = stringResource(R.string.loading)
-    )
-}
-
-@Composable
-fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_connection_error), contentDescription = ""
-        )
-
-        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
-        Button(onClick = retryAction) {
-            Text(stringResource(R.string.retry))
-        }
     }
 }
 
@@ -163,15 +135,13 @@ fun KmrLayout(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(kamar) { kamar -> // Perbaikan di sini
+        items(kamar) { kamar ->
             KmrCard(
                 kamar = kamar,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onDetailClick(kamar) },
-                onDeleteClick = {
-                    onDeleteClick(kamar)
-                }
+                onDeleteClick = { onDeleteClick(kamar) }
             )
         }
     }
@@ -207,24 +177,19 @@ fun KmrCard(
                         contentDescription = null,
                     )
                 }
-                Text(
-                    text = kamar.idBangunan,
-                    style = MaterialTheme.typography.titleMedium
-                )
             }
             Text(
-                text = kamar.noKamar,
+                text = "No. Kamar: ${kamar.noKamar}",
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
-                text = kamar.kapasitas,
+                text = "Kapasitas: ${kamar.kapasitas}",
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
-                text = kamar.statusKamar,
+                text = "Status: ${kamar.statusKamar}",
                 style = MaterialTheme.typography.titleMedium
             )
         }
     }
 }
-
