@@ -13,11 +13,11 @@ import java.io.IOException
 
 sealed class HomeBgnUiState {
     data class Success(val bangunan: List<Bangunan>) : HomeBgnUiState()
-    object  Error : HomeBgnUiState()
+    object Error : HomeBgnUiState()
     object Loading : HomeBgnUiState()
 }
 
-class HomeBangunanVM (private val bgn: BangunanRepository): ViewModel(){
+class HomeBangunanVM(private val bgn: BangunanRepository) : ViewModel() {
     var bgnUIState: HomeBgnUiState by mutableStateOf(HomeBgnUiState.Loading)
         private set
 
@@ -25,26 +25,32 @@ class HomeBangunanVM (private val bgn: BangunanRepository): ViewModel(){
         getBgn()
     }
 
-    fun getBgn(){
+    fun getBgn() {
         viewModelScope.launch {
             bgnUIState = HomeBgnUiState.Loading
-            bgnUIState = try {
-                HomeBgnUiState.Success(bgn.getBangunan().data)
-            }catch (e:IOException){
-                HomeBgnUiState.Error
-            }catch (e: HttpException){
-                HomeBgnUiState.Error
+            try {
+                val bangunanList = bgn.getBangunan().data
+                bgnUIState = HomeBgnUiState.Success(bangunanList)
+            } catch (e: IOException) {
+                println("IOException: ${e.message}") // Cetak pesan error
+                bgnUIState = HomeBgnUiState.Error
+            } catch (e: HttpException) {
+                println("HttpException: ${e.message}") // Cetak pesan error
+                bgnUIState = HomeBgnUiState.Error
             }
         }
     }
-    fun deleteBgn(idBangunan:String){
+
+    fun deleteBgn(idBangunan: String) {
         viewModelScope.launch {
             try {
                 bgn.deleteBangunan(idBangunan)
-            }catch (e: IOException){
-                HomeBgnUiState.Error
-            }catch (e:HttpException){
-                HomeBgnUiState.Error
+            } catch (e: IOException) {
+                println("IOException: ${e.message}") // Cetak pesan error
+                bgnUIState = HomeBgnUiState.Error
+            } catch (e: HttpException) {
+                println("HttpException: ${e.message}") // Cetak pesan error
+                bgnUIState = HomeBgnUiState.Error
             }
         }
     }
