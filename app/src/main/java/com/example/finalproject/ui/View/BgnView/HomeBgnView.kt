@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Model.Bangunan
 import com.example.finalproject.Navigasi.DestinasiNavigasi
-import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.CustomTopAppBar
 import com.example.finalproject.ui.View.OnError
 import com.example.finalproject.ui.View.OnLoading
 import com.example.finalproject.ui.ViewModel.BangunanVM.HomeBangunanVM
@@ -58,7 +58,7 @@ fun HomeScreenBgn(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            CostumeTopAppBar(
+            CustomTopAppBar(
                 title = DestinasiHomeBgn.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
