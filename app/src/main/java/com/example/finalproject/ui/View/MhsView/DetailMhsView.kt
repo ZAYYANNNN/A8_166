@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Model.Mahasiswa
 import com.example.finalproject.Navigasi.DestinasiNavigasi
-import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.CustomTopAppBar
 import com.example.finalproject.ui.View.OnError
 import com.example.finalproject.ui.View.OnLoading
 import com.example.finalproject.ui.ViewModel.MhsVM.DetailMhsUiState
@@ -46,12 +46,13 @@ fun DetailMhsView(
     idMahasiswa: String,
     modifier: Modifier = Modifier,
     viewModel: DetailMhsVM = viewModel(factory = PenyediaViewModel .Factory),
+    onBack: () -> Unit = { },
     onEditClick: (String) -> Unit = {},
     navigateBack:()->Unit,
 ) {
     Scaffold(
         topBar = {
-            CostumeTopAppBar(
+            CustomTopAppBar(
                 title = DestinasiDetailMhs.titleRes,
                 canNavigateBack = true,
                 navigateUp = navigateBack,
