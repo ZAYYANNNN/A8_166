@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Model.Kamar
 import com.example.finalproject.Navigasi.DestinasiNavigasi
-import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.CustomTopAppBar
 import com.example.finalproject.ui.View.OnError
 import com.example.finalproject.ui.View.OnLoading
 import com.example.finalproject.ui.ViewModel.KamarVM.HomeKamarVM
@@ -52,7 +52,7 @@ object DestinasiHomeKmr : DestinasiNavigasi {
 @Composable
 fun HomeScreenKmr(
     navigateToItemEntry: () -> Unit,
-    navigateBack: () -> Unit,  // Parameter navigateBack
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     onDetailClick: (String) -> Unit = {},
     viewModel: HomeKamarVM = viewModel(factory = PenyediaViewModel.Factory)
@@ -61,14 +61,14 @@ fun HomeScreenKmr(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            CostumeTopAppBar(
+            CustomTopAppBar(
                 title = DestinasiHomeKmr.titleRes,
                 canNavigateBack = true,  // Izinkan navigasi kembali
                 scrollBehavior = scrollBehavior,
-                onNavigateBack = navigateBack,  // Gunakan navigateBack
                 onRefresh = {
                     viewModel.getKmr()
-                }
+                },
+                navigateUp = navigateBack
             )
         },
         floatingActionButton = {
