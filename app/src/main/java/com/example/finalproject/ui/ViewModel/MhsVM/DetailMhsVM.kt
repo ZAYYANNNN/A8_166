@@ -29,15 +29,14 @@ class DetailMhsVM(
     fun getDetailMahasiswa() {
         viewModelScope.launch {
             try {
-                // Set loading state
+
                 _detailMhsUiState.value = DetailMhsUiState.Loading
-                // Fetch mahasiswa data dari repository
+
                 val mahasiswa = mhs.getMahasiswabyid(_idMahasiswa)
                 if (mahasiswa != null) {
-                    // Jika data ditemukan, emit sukses
+
                     _detailMhsUiState.value = DetailMhsUiState.Success(mahasiswa)
                 } else {
-                    // Jika data tidak ditemukan, emit error
                     _detailMhsUiState.value = DetailMhsUiState.Error
                 }
             } catch (e: Exception) {
