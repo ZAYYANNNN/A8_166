@@ -15,14 +15,15 @@ interface MahasiswaRepository{
     suspend fun  deleteMahasiswa(idMahasiswa: String)
 
     suspend fun getMahasiswabyid(idMahasiswa: String): Mahasiswa
+
 }
 
 class NetworkMahasiswaRepository(
     private val mahasiswaApiService: MahasiswaService
 ) : MahasiswaRepository {
-    override suspend fun getMahasiswa(): AllMahasiswaResponse =
-        mahasiswaApiService.getAllMahasiswa()
-
+    override suspend fun getMahasiswa(): AllMahasiswaResponse {
+        return mahasiswaApiService.getAllMahasiswa()  // Mengembalikan AllKamarResponse
+    }
 
     override suspend fun insertMahasiswa(mahasiswa: Mahasiswa) {
         mahasiswaApiService.insertMahasiswa(mahasiswa)
