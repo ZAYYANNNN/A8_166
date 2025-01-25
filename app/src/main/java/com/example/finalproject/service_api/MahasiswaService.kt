@@ -13,24 +13,26 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface MahasiswaService {
-    @Headers(
-        "Accept: application/json",
-        "Content-Type: application/json",
-    )
 
-    @GET(".")
+    @GET("mahasiswa")
     suspend fun getAllMahasiswa(): AllMahasiswaResponse
 
-    @GET("{idMahasiswa}")
-    suspend fun getMahasiswabyid(@Path("idMahasiswa") idMahasiswa:String): MahasiswaDetailResponse
 
-    @POST("store")
-    suspend fun insertMahasiswa(@Body mahasiswa:Mahasiswa)
+    @GET("mahasiswa/{id_mahasiswa}")
+    suspend fun getMahasiswabyid(@Path("id_mahasiswa") idMahasiswa: String): MahasiswaDetailResponse
 
-    @PUT("{idMahasiswa}")
-    suspend fun updateMahasiswa(@Path("idMahasiswa")idMahasiswa: String, @Body mahasiswa:Mahasiswa)
 
-    @DELETE("{idMahasiswa}")
-    suspend fun deleteMahasiswa(@Path("idMahasiswa") idMahasiswa:String): Response<Void>
+    @POST("mahasiswa/store")
+    suspend fun insertMahasiswa(@Body mahasiswa: Mahasiswa)
 
+
+    @PUT("mahasiswa/{id_mahasiswa}")
+    suspend fun updateMahasiswa(
+        @Path("id_mahasiswa") idMahasiswa: String,
+        @Body mahasiswa: Mahasiswa
+    )
+
+
+    @DELETE("mahasiswa/{id_mahasiswa}")
+    suspend fun deleteMahasiswa(@Path("id_mahasiswa") idMahasiswa: String): Response<Void>
 }
