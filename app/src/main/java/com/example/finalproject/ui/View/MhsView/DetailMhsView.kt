@@ -28,6 +28,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Model.Mahasiswa
 import com.example.finalproject.Navigasi.DestinasiNavigasi
 import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.View.OnError
+import com.example.finalproject.ui.View.OnLoading
 import com.example.finalproject.ui.ViewModel.MhsVM.DetailMhsUiState
 import com.example.finalproject.ui.ViewModel.MhsVM.DetailMhsVM
 import com.example.finalproject.ui.ViewModel.PenyediaViewModel
