@@ -14,7 +14,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Navigasi.DestinasiNavigasi
-import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.CustomTopAppBar
 import com.example.finalproject.ui.ViewModel.KamarVM.UpdateKamarVM
 import com.example.finalproject.ui.ViewModel.PenyediaViewModel
 import kotlinx.coroutines.launch
@@ -43,7 +43,7 @@ fun UpdateKmrView(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            CostumeTopAppBar(
+            CustomTopAppBar(
                 title = DestinasiUpdateKmr.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
