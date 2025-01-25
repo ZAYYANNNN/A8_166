@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Model.Kamar
 import com.example.finalproject.Navigasi.DestinasiNavigasi
-import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.CustomTopAppBar
 import com.example.finalproject.ui.ViewModel.MhsVM.InsertMhsVM
 import com.example.finalproject.ui.ViewModel.MhsVM.MahasiswaUiEvent
 import com.example.finalproject.ui.ViewModel.MhsVM.MahasiswaUiState
@@ -29,7 +29,7 @@ object DestinasiEntryMhs : DestinasiNavigasi {
 @Composable
 fun EntryMhsScreen(
     navigateBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val viewModel: InsertMhsVM = viewModel(factory = PenyediaViewModel.Factory)
 
@@ -46,7 +46,7 @@ fun EntryMhsScreen(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            CostumeTopAppBar(
+            CustomTopAppBar(
                 title = DestinasiEntryMhs.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
