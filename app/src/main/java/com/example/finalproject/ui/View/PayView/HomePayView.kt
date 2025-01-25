@@ -39,10 +39,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Model.Sewa
 import com.example.finalproject.Navigasi.DestinasiNavigasi
 import com.example.finalproject.R
-import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.CustomTopAppBar
 import com.example.finalproject.ui.ViewModel.PayVM.HomePayVM
 import com.example.finalproject.ui.ViewModel.PayVM.HomeSewaUiState
 import com.example.finalproject.ui.ViewModel.PenyediaViewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 object DestinasiHomePay : DestinasiNavigasi {
     override val route = "homepay"
@@ -53,6 +55,7 @@ object DestinasiHomePay : DestinasiNavigasi {
 @Composable
 fun HomeScreenPay(
     navigateToItemEntry: () -> Unit,
+    navigateBack: () -> Unit, // Tambahkan fungsi navigateBack
     modifier: Modifier = Modifier,
     onDetailClick: (String) -> Unit = {},
     viewModel: HomePayVM = viewModel(factory = PenyediaViewModel.Factory)
@@ -61,13 +64,14 @@ fun HomeScreenPay(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            CostumeTopAppBar(
+            CustomTopAppBar(
                 title = DestinasiHomePay.titleRes,
-                canNavigateBack = false,
+                canNavigateBack = true, // Aktifkan opsi kembali
                 scrollBehavior = scrollBehavior,
                 onRefresh = {
                     viewModel.getSwa()
-                }
+                },
+                navigateUp = navigateBack // Menggunakan fungsi navigateBack
             )
         },
         floatingActionButton = {
@@ -89,7 +93,6 @@ fun HomeScreenPay(
             }
         )
     }
-
 }
 
 @Composable
@@ -183,6 +186,15 @@ fun PayCard(
     modifier: Modifier = Modifier,
     onDeleteClick: (Sewa) -> Unit = {}
 ) {
+    val formattedDate = try {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = inputFormat.parse(sewa.tglPembayaran)
+        outputFormat.format(date ?: "")
+    } catch (e: Exception) {
+        sewa.tglPembayaran // Jika terjadi error, tampilkan data asli
+    }
+
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
@@ -217,7 +229,7 @@ fun PayCard(
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
-                text = sewa.tglPembayaran,
+                text = formattedDate,  // Tampilkan tanggal dengan format yyyy-MM-dd
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
