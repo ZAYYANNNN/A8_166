@@ -90,11 +90,3 @@ data class KamarUiEvent(
     )
 }
 
-// Convert Kamar to KamarUiEvent
-fun Kamar.toKamarUiEvent(): KamarUiEvent = KamarUiEvent(
-    idKamar = idKamar,
-    idBangunan = idBangunan,
-    noKamar = noKamar,
-    kapasitas = kapasitas,
-    statusKamar = statusKamar
-)
