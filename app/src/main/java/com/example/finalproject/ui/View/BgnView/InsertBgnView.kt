@@ -21,7 +21,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Navigasi.DestinasiNavigasi
-import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.CustomTopAppBar
 import com.example.finalproject.ui.ViewModel.BangunanVM.BangunanUiEvent
 import com.example.finalproject.ui.ViewModel.BangunanVM.BangunanUiState
 import com.example.finalproject.ui.ViewModel.BangunanVM.InsertBangunanVM
@@ -45,7 +45,7 @@ fun EntryBgnScreen(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            CostumeTopAppBar(
+            CustomTopAppBar(
                 title = DestinasiEntryBgn.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
