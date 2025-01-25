@@ -1,61 +1,63 @@
 package com.example.finalproject.ui.View.MhsView
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.Model.Kamar
 import com.example.finalproject.Navigasi.DestinasiNavigasi
+import com.example.finalproject.ui.CostumeTopAppBar
 import com.example.finalproject.ui.ViewModel.MhsVM.InsertMhsVM
 import com.example.finalproject.ui.ViewModel.MhsVM.MahasiswaUiEvent
 import com.example.finalproject.ui.ViewModel.MhsVM.MahasiswaUiState
 import com.example.finalproject.ui.ViewModel.PenyediaViewModel
 import kotlinx.coroutines.launch
 
-object DestinasiEntry:DestinasiNavigasi{
-    override val route = "item_entry"
+// Destinasi navigasi untuk EntryMhs
+object DestinasiEntryMhs : DestinasiNavigasi {
+    override val route = "entryMhs"
     override val titleRes = "Entry Mhs"
 }
 
+// EntryMhsScreen untuk UI utama
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EntryMhsScreen(
-    navigateBack:()->Unit,
-    modifier: Modifier = Modifier,
-    viewModel: InsertMhsVM = viewModel(factory = PenyediaViewModel.Factory)
-){
+    navigateBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val viewModel: InsertMhsVM = viewModel(factory = PenyediaViewModel.Factory)
+
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+    val kamarList by viewModel.kamarList.collectAsState()
+    val mahasiswaUiState = viewModel.uiState
+
+    LaunchedEffect(Unit) {
+        viewModel.loadKamarList()
+    }
+
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiEntry.titleRes,
+                title = DestinasiEntryMhs.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = navigateBack
             )
         }
     ) { innerPadding ->
-        EntryBody(
-            mahasiswaUiState = viewModel.uiState,
-            onSiswaValueChange = viewModel::updateInsertMhsState,
+        EntryBodyMhs(
+            mahasiswaUiState = mahasiswaUiState,
+            kamarList = kamarList,
+            onMahasiswaValueChange = viewModel::updateInsertMhsState,
             onSaveClick = {
                 coroutineScope.launch {
                     viewModel.insertMhs()
@@ -70,22 +72,30 @@ fun EntryMhsScreen(
     }
 }
 
+// EntryBodyMhs untuk form input mahasiswa
 @Composable
-fun EntryBody(
+fun EntryBodyMhs(
     mahasiswaUiState: MahasiswaUiState,
-    onSiswaValueChange:(MahasiswaUiEvent)->Unit,
-    onSaveClick:()->Unit,
-    modifier: Modifier=Modifier
-){
+    kamarList: List<Kamar>,
+    onMahasiswaValueChange: (MahasiswaUiEvent) -> Unit,
+    onSaveClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(18.dp),
         modifier = modifier.padding(12.dp)
     ) {
-        FormInput(
-            mahasiswaUiEvent = mahasiswaUiState.mahasiswaUiEvent,
-            onValueChange = onSiswaValueChange,
-            modifier = Modifier.fillMaxWidth()
-        )
+        if (kamarList.isEmpty()) {
+            Text(text = "Data Kamar belum tersedia", color = MaterialTheme.colorScheme.error)
+        } else {
+            FormInputMhs(
+                mahasiswaUiEvent = mahasiswaUiState.mahasiswaUiEvent,
+                kamarList = kamarList,
+                onValueChange = onMahasiswaValueChange,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
         Button(
             onClick = onSaveClick,
             shape = MaterialTheme.shapes.small,
@@ -96,78 +106,93 @@ fun EntryBody(
     }
 }
 
+// FormInputMhs untuk input form mahasiswa
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormInput(
+fun FormInputMhs(
     mahasiswaUiEvent: MahasiswaUiEvent,
-    modifier: Modifier =Modifier,
-    onValueChange:(MahasiswaUiEvent)->Unit = {},
-    enabled: Boolean = true
-){
+    kamarList: List<Kamar>,
+    modifier: Modifier = Modifier,
+    onValueChange: (MahasiswaUiEvent) -> Unit = {}
+) {
+    var isExpanded by remember { mutableStateOf(false) }
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         OutlinedTextField(
             value = mahasiswaUiEvent.idMahasiswa,
-            onValueChange = {onValueChange(mahasiswaUiEvent.copy(idMahasiswa = it))},
+            onValueChange = { onValueChange(mahasiswaUiEvent.copy(idMahasiswa = it)) },
             label = { Text("ID Mahasiswa") },
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
             singleLine = true
         )
-        OutlinedTextField(
-            value = mahasiswaUiEvent.idKamar,
-            onValueChange = {onValueChange(mahasiswaUiEvent.copy(idKamar= it))},
-            label = { Text("ID Kamar") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true,
 
-
-
-        )
         OutlinedTextField(
             value = mahasiswaUiEvent.nim,
-            onValueChange = {onValueChange(mahasiswaUiEvent.copy(nim = it))},
+            onValueChange = { onValueChange(mahasiswaUiEvent.copy(nim = it)) },
             label = { Text("NIM") },
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
             singleLine = true
         )
+
         OutlinedTextField(
             value = mahasiswaUiEvent.nama,
-            onValueChange = {onValueChange(mahasiswaUiEvent.copy(nama = it))},
-            label = { Text("Jenis Kelamin") },
+            onValueChange = { onValueChange(mahasiswaUiEvent.copy(nama = it)) },
+            label = { Text("Nama Mahasiswa") },
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
             singleLine = true
         )
+
         OutlinedTextField(
             value = mahasiswaUiEvent.email,
-            onValueChange = {onValueChange(mahasiswaUiEvent.copy(email = it))},
+            onValueChange = { onValueChange(mahasiswaUiEvent.copy(email = it)) },
             label = { Text("Email") },
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
             singleLine = true
         )
+
         OutlinedTextField(
             value = mahasiswaUiEvent.telp,
-            onValueChange = {onValueChange(mahasiswaUiEvent.copy(telp = it))},
-            label = { Text("No Telepon") },
+            onValueChange = { onValueChange(mahasiswaUiEvent.copy(telp = it)) },
+            label = { Text("No. Telepon") },
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
             singleLine = true
         )
-        if (enabled){
-            Text(
-                text = "Isi Semua Data!",
-                modifier = Modifier.padding(12.dp)
+
+        ExposedDropdownMenuBox(
+            expanded = isExpanded,
+            onExpandedChange = { isExpanded = !isExpanded },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                value = mahasiswaUiEvent.idKamar,
+                onValueChange = { onValueChange(mahasiswaUiEvent.copy(idKamar = it)) },
+                label = { Text("ID Kamar") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(),
+                singleLine = true,
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
+                }
             )
+
+            ExposedDropdownMenu(
+                expanded = isExpanded,
+                onDismissRequest = { isExpanded = false }
+            ) {
+                kamarList.forEach { kamar ->
+                    DropdownMenuItem(
+                        text = { Text("ID Kamar: ${kamar.idKamar}") },
+                        onClick = {
+                            onValueChange(mahasiswaUiEvent.copy(idKamar = kamar.idKamar))
+                            isExpanded = false
+                        }
+                    )
+                }
+            }
         }
-        Divider(
-            thickness = 8.dp,
-            modifier = Modifier.padding(12.dp)
-        )
     }
 }
