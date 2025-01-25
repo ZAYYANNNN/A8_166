@@ -7,30 +7,28 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface SewaService {
-    @Headers(
-        "Accept: application/json",
-        "Content-Type: application/json",
-    )
 
-    @GET(".")
+    @GET("pembayaran")
     suspend fun getAllPembayaran(): AllSewaResponse
 
-    @GET("{idPembayaran}")
-    suspend fun getPembayaranbyid(@Path("idPembayaran") idPembayaran:String): SewaDetailResponse
 
-    @POST("store")
+    @GET("pembayaran/{id_pembayaran}")
+    suspend fun getPembayaranbyid(@Path("id_pembayaran") idPembayaran: String): SewaDetailResponse
+
+    @POST("pembayaran/store")
     suspend fun insertPembayaran(@Body sewa: Sewa)
 
-    @PUT("{idPembayaran}")
-    suspend fun updatePembayaran(@Path("idPembayaran")idPembayaran: String, @Body sewa: Sewa)
+    @PUT("pembayaran/{id_pembayaran}")
+    suspend fun updatePembayaran(
+        @Path("id_pembayaran") idPembayaran: String,
+        @Body sewa: Sewa
+    )
 
-    @DELETE("{idPembayaran}")
-    suspend fun deletePembayaran(@Path("idPembayaran") idPembayaran: String): Response<Void>
-
+    @DELETE("pembayaran/{id_pembayaran}")
+    suspend fun deletePembayaran(@Path("id_pembayaran") idPembayaran: String): Response<Void>
 }
