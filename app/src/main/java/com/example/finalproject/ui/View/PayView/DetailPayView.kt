@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Model.Sewa
 import com.example.finalproject.Navigasi.DestinasiNavigasi
-import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.CustomTopAppBar
 import com.example.finalproject.ui.ViewModel.PayVM.DetailPayVM
 import com.example.finalproject.ui.ViewModel.PayVM.DetailSewaUiState
 import com.example.finalproject.ui.ViewModel.PenyediaViewModel
@@ -49,7 +49,7 @@ fun DetailPayView(
 ) {
     Scaffold(
         topBar = {
-            CostumeTopAppBar(
+            CustomTopAppBar(
                 title = DestinasiDetailPay.titleRes,
                 canNavigateBack = true,
                 navigateUp = navigateBack,
@@ -60,11 +60,13 @@ fun DetailPayView(
             FloatingActionButton(
                 onClick = { onEditClick(idPembayaran) },
                 shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp),
+                containerColor = Color(0xFF0D47A1)
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit Pembayaran"
+                    contentDescription = "Edit Pembayaran",
+                    tint = Color.White
                 )
             }
         }
@@ -119,8 +121,8 @@ fun ItemDetailPay(
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            containerColor = Color(0xFF0D47A1), // Warna biru tua
+            contentColor = Color.White
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -136,6 +138,7 @@ fun ItemDetailPay(
         }
     }
 }
+
 @Composable
 fun ComponentDetailPay(
     judul: String,
