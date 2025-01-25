@@ -13,7 +13,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Navigasi.DestinasiNavigasi
-import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.CustomTopAppBar
 import com.example.finalproject.ui.ViewModel.PayVM.UpdatePayVM
 import com.example.finalproject.ui.ViewModel.PayVM.toSwa
 import com.example.finalproject.ui.ViewModel.PenyediaViewModel
@@ -36,10 +36,11 @@ fun UpdatePayView(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     // Collect the UI state from the ViewModel
     val uiState = viewModel.uiState.value
+    val mahasiswaList = viewModel.mahasiswaList.value
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            CostumeTopAppBar(
+            CustomTopAppBar(
                 title = DestinasiUpdatePay.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
@@ -53,21 +54,20 @@ fun UpdatePayView(
                 .padding(padding)
                 .padding(16.dp)
         ) {
-            // Pass the UI state to the EntryBody
             EntryBodyPay(
                 sewaUiState = uiState,
+                mahasiswaList = mahasiswaList,
                 onPayValueChange = { updatedValue ->
-                    viewModel.updateSewaState(updatedValue) // Update ViewModel state
+                    viewModel.updateSewaState(updatedValue)
                 },
                 onSaveClick = {
                     uiState.sewaUiEvent?.let { sewaUiEvent ->
                         coroutineScope.launch {
-                            // Call ViewModel update method
                             viewModel.updateSewa(
                                 idPembayaran = viewModel.idPembayaran,
                                 sewa = sewaUiEvent.toSwa()
                             )
-                            navigateBack() // Navigate back after saving
+                            navigateBack()
                         }
                     }
                 }
