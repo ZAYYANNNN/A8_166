@@ -1,5 +1,6 @@
 package com.example.finalproject.Repository
 
+import com.example.finalproject.Model.AllMahasiswaResponse
 import com.example.finalproject.Model.AllSewaResponse
 import com.example.finalproject.Model.Sewa
 import com.example.finalproject.service_api.SewaService
@@ -21,8 +22,9 @@ import java.io.IOException
     class NetworkSewaRepository(
         private val SewaApiService: SewaService
     ) : SewaRepository {
-        override suspend fun getPembayaran(): AllSewaResponse =
-            SewaApiService.getAllPembayaran()
+        override suspend fun getPembayaran(): AllSewaResponse {
+            return SewaApiService.getAllPembayaran()
+        }
 
 
         override suspend fun insertPembayaran(sewa: Sewa) {
