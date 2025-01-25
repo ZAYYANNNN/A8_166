@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.finalproject.Model.Bangunan
 import com.example.finalproject.Navigasi.DestinasiNavigasi
-import com.example.finalproject.ui.CostumeTopAppBar
+import com.example.finalproject.ui.CustomTopAppBar
 import com.example.finalproject.ui.ViewModel.KamarVM.InsertKamarVM
 import com.example.finalproject.ui.ViewModel.KamarVM.KamarUiEvent
 import com.example.finalproject.ui.ViewModel.KamarVM.KamarUiState
@@ -46,7 +46,7 @@ fun EntryKmrScreen(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            CostumeTopAppBar(
+            CustomTopAppBar(
                 title = DestinasiEntryKmr.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
@@ -116,7 +116,9 @@ fun FormInputKmr(
     modifier: Modifier = Modifier,
     onValueChange: (KamarUiEvent) -> Unit = {}
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
+    var isExpandedBangunan by remember { mutableStateOf(false) }
+    var isExpandedStatus by remember { mutableStateOf(false) } // Menambahkan state untuk dropdown status
+    val statusOptions = listOf("Terisi", "Kosong") // Daftar status kamar
 
     Column(
         modifier = modifier,
@@ -131,8 +133,8 @@ fun FormInputKmr(
         )
 
         ExposedDropdownMenuBox(
-            expanded = isExpanded,
-            onExpandedChange = { isExpanded = !isExpanded },
+            expanded = isExpandedBangunan,
+            onExpandedChange = { isExpandedBangunan = !isExpandedBangunan },
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
@@ -144,20 +146,20 @@ fun FormInputKmr(
                     .menuAnchor(),
                 singleLine = true,
                 trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpandedBangunan)
                 }
             )
 
             ExposedDropdownMenu(
-                expanded = isExpanded,
-                onDismissRequest = { isExpanded = false }
+                expanded = isExpandedBangunan,
+                onDismissRequest = { isExpandedBangunan = false }
             ) {
                 bangunanList.forEach { bangunan ->
                     DropdownMenuItem(
                         text = { Text("ID Bangunan: ${bangunan.idBangunan}") },
                         onClick = {
                             onValueChange(kamarUiEvent.copy(idBangunan = bangunan.idBangunan))
-                            isExpanded = false
+                            isExpandedBangunan = false
                         }
                     )
                 }
@@ -180,12 +182,39 @@ fun FormInputKmr(
             singleLine = true
         )
 
-        OutlinedTextField(
-            value = kamarUiEvent.statusKamar,
-            onValueChange = { onValueChange(kamarUiEvent.copy(statusKamar = it)) },
-            label = { Text("Status Kamar") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
-        )
+        // Dropdown untuk status kamar
+        ExposedDropdownMenuBox(
+            expanded = isExpandedStatus,
+            onExpandedChange = { isExpandedStatus = !isExpandedStatus },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                value = kamarUiEvent.statusKamar,
+                onValueChange = { onValueChange(kamarUiEvent.copy(statusKamar = it)) },
+                label = { Text("Status Kamar") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(),
+                singleLine = true,
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpandedStatus)
+                }
+            )
+
+            ExposedDropdownMenu(
+                expanded = isExpandedStatus,
+                onDismissRequest = { isExpandedStatus = false }
+            ) {
+                statusOptions.forEach { status ->
+                    DropdownMenuItem(
+                        text = { Text(status) },
+                        onClick = {
+                            onValueChange(kamarUiEvent.copy(statusKamar = status))
+                            isExpandedStatus = false
+                        }
+                    )
+                }
+            }
+        }
     }
 }
